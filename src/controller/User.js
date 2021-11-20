@@ -26,7 +26,6 @@ export async function createUser(req, res) {
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-    console.log(userExists);
     return res.status(422).json({ msg: "Esse email ja foi utilizado" });
   }
 
@@ -55,7 +54,7 @@ export async function sigInUser(req, res) {
     return res.status(422).json({ msg: "O email é obrigatório" });
   }
   if (!password) {
-    return res.status(422).json({ msg: "A senha é obrigatório" });
+    return res.status(422).json({ msg: "A senha é obrigatória" });
   }
 
   const user = await User.findOne({ email });
