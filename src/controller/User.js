@@ -76,7 +76,8 @@ export async function sigInUser(req, res) {
       {
         id: user._id,
       },
-      secret
+      secret,
+      { expiresIn: "1d" }
     );
 
     res.status(200).json({ msg: "Usuário logado com sucesso", token });
