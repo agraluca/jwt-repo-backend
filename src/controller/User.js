@@ -107,8 +107,7 @@ export async function userProfile(req, res) {
 }
 
 export async function refreshToken(req, res) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader?.split(" ")[1];
+  const { token } = req.body;
   const secret = process.env.SECRET;
   const data = jwt.verify(token, secret);
 
