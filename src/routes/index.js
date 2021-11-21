@@ -15,4 +15,6 @@ routes.post("/auth/register", UserController.createUser);
 
 routes.post("/auth/signin", UserController.sigInUser);
 
+routes.post("/auth/refresh", checkToken, UserController.refreshToken);
+
 export default routes;

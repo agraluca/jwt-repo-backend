@@ -74,6 +74,8 @@ export async function sigInUser(req, res) {
     const token = jwt.sign(
       {
         id: user._id,
+        name: user.name,
+        email: user.email,
       },
       secret,
       { expiresIn: "1d" }
@@ -98,6 +100,38 @@ export async function userProfile(req, res) {
 
   try {
     res.status(200).json({ msg: "Usuário encontrado com sucesso", user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Aconteceu um erro no servidor" });
+  }
+}
+
+export async function refreshToken(req, res) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader?.split(" ")[1];
+  const secret = process.env.SECRET;
+  const data = jwt.verify(token, secret);
+
+  const user = await User.findById(data.id, "-password");
+
+  if (!user) {
+    return res.status(404).json({ msg: "Usuário não encontrado" });
+  }
+
+  try {
+    const newToken = jwt.sign(
+      {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+      secret,
+      { expiresIn: "1d" }
+    );
+
+    res
+      .status(200)
+      .json({ msg: "JWT atualizado com sucesso", token: newToken });
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Aconteceu um erro no servidor" });
